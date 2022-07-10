@@ -30,6 +30,7 @@ from funcs import *
 # plt.show()
 
 # %% Question 2
+## Get and parse data ---------------------------------------------------------
 fld_data = Path("./data")
 file_name_list = ['covarianceMAtrix.csv',
                   'factorLoadings.csv',
@@ -37,5 +38,49 @@ file_name_list = ['covarianceMAtrix.csv',
                   'PortfolioHoldings.csv']
 cov_df, factor_loadings_df, factors_df, ptf_holdings_df = (read_data(fld_data, x) for x in file_name_list)
 sigma_f, omega, beta, w = parse_data(cov_df, factor_loadings_df, factors_df, ptf_holdings_df)
+
+## Question 2.1 --------------------------------------------------------------
 sigma_n = compute_sigma_n(sigma_f, beta, omega)
-ptf_vola = compute_ptf_vola(sigma_n, beta, w)
+ptf_vola = compute_ptf_vola(sigma_n, w)
+
+## Question 2.2 ---------------------------------------------------------------
+MRC = compute_MRC(sigma_n, w, ptf_vola)
+RC = compute_RC(MRC, w)
+PRC = compute_PRC(RC, ptf_vola)
+
+ptf_holdings_df['PRC'] = PRC
+ptf_holdings_df['RC'] = RC
+ptf_holdings_df['PRC'] = PRC
+
+plot_bar_chart(ptf_holdings_df, 
+               'Weight',
+               'PRC',
+               fld_data,
+               by_sector = False)
+ptf_holdings_df_grouped = ptf_holdings_df[['Sector','Weight', 'PRC']].groupby('Sector').sum()
+plot_bar_chart(ptf_holdings_df_grouped, 
+               'Weight',
+               'PRC',
+               fld_data,
+               by_sector = True)
+
+## Question 2.3 ---------------------------------------------------------------
+res = compute_ERC_weight(sigma_n, w)
+w_ERC = res.x
+
+ptf_vola_ERC = compute_ptf_vola(sigma_n, w_ERC)
+MRC_ERC = compute_MRC(sigma_n, w_ERC, ptf_vola_ERC)
+RC_ERC = compute_RC(MRC_ERC, w_ERC)
+PRC_ERC = compute_PRC(RC_ERC, ptf_vola_ERC)
+
+ptf_holdings_df['w_ERC'] = w_ERC
+ptf_holdings_df['PRC_ERC'] = PRC_ERC
+ptf_holdings_df['RC_ERC'] = RC_ERC
+ptf_holdings_df['PRC_ERC'] = PRC_ERC
+
+plot_bar_chart(ptf_holdings_df, 
+               'w_ERC',
+               'PRC_ERC',
+               fld_data,
+               by_sector = False)
+
