@@ -1,0 +1,184 @@
+\documentclass[12pt, a4paper]{article}
+
+\include{packages}
+%\usepackage{appendix}
+
+%\DeclareMathOperator*{\sup}{sup}
+\DeclareMathOperator*{\argmax}{arg\,max} % argmax operator
+
+%% remark theoremstyle
+%\newtheoremstyle{break}
+%{\topsep}{\topsep}%
+%{\itshape}{}%
+%{\bfseries}{}%
+%{\newline}{}%
+%\theoremstyle{break}
+%\newtheorem{remark}{Remark}[section]
+
+% problem theoremstyle
+\newtheoremstyle{problemstyle}  % <name>
+{10pt}  % <space above>
+{10pt}  % <space below>
+{\normalfont} % <body font>
+{}  % <indent amount}
+{\bfseries\itshape} % <theorem head font>
+{\normalfont\bfseries:} % <punctuation after theorem head>
+{.5em} % <space after theorem head>
+{} % <theorem head spec (can be left empty, meaning `normal')>
+\theoremstyle{problemstyle}
+\newtheorem{problem}{Problem}[section] % Comment out [section] toremove section number dependence
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{lemma}{Lemma}[section]
+% create command for variance in math mode
+\newcommand{\Var}[1]{\operatorname{Var}\left[#1\right]}
+\newcommand{\Cov}[1]{\operatorname{Cov}\left[#1\right]}
+
+
+
+%opening
+\title{Case study answers}
+\author{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+	In this document we provide the answers to the case study problems. Supporting code for numerical results and plots is available at this \href{https://github.com/skiamu/case-study}{github repo}.
+\end{abstract}
+
+\section{Question 1}
+Let $X \sim \text{logN}\big(\mu, \sigma^2\big)$. Here some standard results about the lognormal distribution which will be used in the following:
+\begin{gather}
+m =  \mathbb{E}[X]  = \exp\Big(\mu+\sigma^2/2\Big) \\
+v=  \Var{X} =  \Big[\exp(\sigma^2-1)\Big]\exp\Big(2\mu+\sigma^2\Big)\\\label{eq:logn_median}
+m^{\star} =   \text{Med}[X] = \exp(\mu) 
+\end{gather}
+\subsection{Question 1.1}
+In order compute the median $m^{\star}$ we need to derive the parameters $\mu$ and $\sigma^2$ first. That amounts to solve the following system
+\begin{equation}
+\begin{cases}
+m = \exp\Big(\mu+\sigma^2/2\Big)\\
+v = \Big[\exp(\sigma^2-1)\Big]\exp\Big(2\mu+\sigma^2\Big).
+\end{cases}
+\end{equation}
+By noting that the second factor in $v$ is equal to $m^2$ we get that 
+\begin{equation}
+\begin{cases}
+\sigma^2=\log\Big(\frac{v}{m^2}+1\Big)\\
+\mu = \log(m) - \sigma^2/2.
+\end{cases}
+\end{equation}
+By plugging the numbers we get $\sigma^2=0.02257$ and $\mu = 0.0469 $. It follows from (\ref{eq:logn_median}) that $m^{\star}=1.0481$.
+
+\subsection{Question 1.2}
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.7]{data/lognorm_hist}
+	\caption{Probability density function of $X$ and the histogram of 10000 samples drawn from the distribution of $X$.}
+\end{figure}
+
+
+\section{Question 2}
+In this section we answer question 2. Before doing that, we briefly recall the underlying factor model for asset returns in order to set notation 
+
+\begin{definition}
+	Let $R$ be an $n$-dimensional random vector describing assets return over a generic period $[t, T]$. We suppose $R$ follows a linear factor model 
+	\begin{equation}\label{eq:factor_model}
+	R = \beta R_f + \epsilon
+	\end{equation}
+	where
+	\begin{itemize}
+		\item $R_f$ is a $f$-dimensional random vector describing factors returns
+		\item $\beta \in \mathbb{R}^{n \times f}$ is the factor loadings matrix
+		\item $\epsilon$ is the $n$-dimensional random vector of residuals.
+	\end{itemize}
+The folowing standard hypothesis apply
+\begin{itemize}
+	\item $\epsilon_i \overset{\mathrm{iid}}{\sim} (0, \Omega_{ii})$, $\forall i = 1, \ldots, n$
+	\item $R_f$ and $\epsilon$ are uncorrelated (i.e. $\Cov{R_f, \epsilon}=0_{f\times n}$)
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+	If $R$ follows the factor model (\ref{eq:factor_model}), then 
+	\begin{equation}
+	\Cov{R}:=\Sigma_n=\beta\Sigma_f \beta^T + \Omega,
+	\end{equation}
+	where $\Sigma_f$ is the covariance matrix of $R_f$ and $\Omega$ is the diagonal covariance matrix of $\epsilon$
+\end{proposition}
+\begin{proof}
+	The expected value of $R$ reads $\mathbb{E}[R]=\beta \bar{R}_f$. Therefore
+	\begin{align}
+	\Cov{R} & = \mathbb{E}\Bigg[\Big(R - \beta \bar{R}_f\Big)\Big(R - \beta \bar{R}_f\Big)^T\Bigg] \\
+	& = \mathbb{E}\Bigg[\Big(\beta R_f + \epsilon -  \beta \bar{R}_f\Big)\Big(R_f^T\beta^T + \epsilon^T - \bar{R}_f^T\beta^T\Big)\Bigg]\\ \label{eq:hp1}
+	& = \beta\mathbb{E}[R_fR_f^T]\beta^T + \mathbb{E}[\epsilon \epsilon^T] - \beta\bar{R}_f\bar{R}_f^T\beta^T\\ \label{eq:hp2}
+	& = \beta\Sigma_f \beta^T + \Omega,
+	\end{align}
+	where in (\ref{eq:hp1}) we used the fact that $R_f$ and $\epsilon$ are uncorrelated and $\epsilon$ has zero mean.
+\end{proof}
+
+\subsection{Question 2.1}
+Let $w \in \mathbb{R}^n$ be the vector of portfolio weights. Then
+\begin{equation}
+\sigma(w)=\sqrt{\Var{w^T R}}=\sqrt{w^T\Sigma_n w} = \sqrt{w^T\beta\Sigma_f\beta^Tw + w^T\Omega w}.
+\end{equation}
+Plugging the numbers we get $\sigma(w)=40.71\%$
+
+\subsection{Question 2.2}
+Let us recall the main results about risk decomposition.
+\begin{definition}
+	Let $f(x)$ be a continous continuous and differentiable function of $x \in \mathbb{R}^n$. $f$ is said homogenous of degree one if 
+	\begin{equation}
+	f(cx) = cf(x),
+	\end{equation}
+	$\forall c \in \mathbf{R}$, $c>0$.
+\end{definition}
+
+\begin{theorem}(Euler)
+	Let $f(x)$ be a continuous, differentiable and homogenous function of order one. Then 
+	\begin{equation}
+	f(x) = \sum_{i=1}^{n}x_i \frac{\partial f(x)}{\partial x_i} = x^T \nabla f(x)
+	\end{equation}
+\end{theorem}
+
+
+It can be shown that portfolio volatility $\sigma = (w^T\Sigma_n w)^{1/2}$ is an homogenous function of degree one in $w$. Applying Euler's Theorem we have 
+\begin{equation}
+\sigma(w)=\sum_{i=1}^nw_i \frac{\partial \sigma(w)}{\partial w} = \sum_{i=1}^n w_i \text{MRC}_{i} = \sum_{i=1}^n \text{RC}_{i},
+\end{equation}
+where MRC stands for \textit{marginal risk contribution} and RC for \textit{risk contribution}. Given that $\nabla\sigma(w) = \frac{\Sigma_n w}{(w^T\Sigma_n w)^{1/2}}$, we have that
+\begin{align}
+\text{MRC}_i & = \frac{(\Sigma_n w)_i}{(w^T\Sigma_n w)^{1/2}}\\
+\text{RC}_i & = w_i \frac{(\Sigma_n w)_i}{(w^T\Sigma_n w)^{1/2}}\\
+\text{PRC}_i & = \frac{\text{RC}}{\sigma(w)} = w_i \frac{(\Sigma_n w)_i}{(w^T\Sigma_n w)}
+\end{align}
+
+Having this in mind, we can break down portfolio volatility by asset and sectors. Results are shown in Figure (\ref{fig:histo_by_asset}) and (\ref{fig:histo_by_sector}) respectively
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{data/bar_plot_by_asset_Weight_PRC}
+	\caption{Weights and percentage risk contributions (PRC) of a portfolio of US stocks}
+	\label{fig:histo_by_asset}
+\end{figure}
+\begin{figure}[H]
+ 	\centering
+ 	\includegraphics[scale=0.7]{data/bar_plot_by_sector_Weight_PRC}
+ 	\caption{Sectors weights and percentage risk contributions (PRC) of a portfolio of US stocks}
+ 	\label{fig:histo_by_sector}
+ \end{figure}
+ 
+
+
+
+
+
+\appendix
+\section{Appendix}
+
+
+\end{document}

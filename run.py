@@ -17,21 +17,30 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO,
                     format="%(levelname)s %(asctime)s - %(message)s")
 
 from funcs import *
-# %% Question 1
-# N = 10000  # number of samples, must be an int
-# rng = np.random.default_rng(seed=12345)
-# mu, sigma = 1.06, np.sqrt(0.025656229)
-# s = rng.lognormal(mu, sigma, N)
-# count, bins, _ = plt.hist(s, 100, density=True)
-# x = np.linspace(min(bins), max(bins), 10000)
-# pdf = lognorm(s=sigma, scale=np.exp(mu)).pdf(x)
-# plt.plot(x, pdf, linewidth=2, color='r')
-# plt.axis('tight')
-# plt.show()
 
+# %% Question 1
+fld_data = Path("./data")
+## Question 1.1 ---------------------------------------------------------------
+m = 1.06
+v = 0.025656229
+mu, sigma_2 = compute_normal_params(m, v)
+sigma = np.sqrt(sigma_2)
+m_star = np.exp(mu)
+m_hat, v_hat = check_logn_params(mu = mu, sigma = sigma)
+
+## Question 1.2 ---------------------------------------------------------------
+N = 10000  # number of samples, must be an int
+rng = np.random.default_rng(seed=12345)
+s = rng.lognormal(mu, sigma, N)
+count, bins, _ = plt.hist(s, 100, density=True)
+x = np.linspace(min(bins), max(bins), 10000)
+pdf = lognorm(s=sigma, scale=np.exp(mu)).pdf(x)
+plt.plot(x, pdf, linewidth=2, color='r')
+plt.axis('tight')
+plt.show()
+plt.savefig(fld_data / 'lognorm_hist.png')
 # %% Question 2
 ## Get and parse data ---------------------------------------------------------
-fld_data = Path("./data")
 file_name_list = ['covarianceMAtrix.csv',
                   'factorLoadings.csv',
                   'factors.csv',

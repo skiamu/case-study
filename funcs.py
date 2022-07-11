@@ -10,7 +10,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 from scipy.optimize import minimize
+from scipy.stats import lognorm
 
+def compute_normal_params(m, v):
+    sigma_2 = np.log(v / m**2 + 1)
+    mu = np.log(m) - sigma_2 / 2
+    return mu, sigma_2
+
+def check_logn_params(mu, sigma):
+    logn_dist = lognorm(s=sigma, scale=np.exp(mu))
+    return logn_dist.mean(), logn_dist.var()
+    
 
 def read_data(fld_data, file_name):
     full_file_name = fld_data / file_name
