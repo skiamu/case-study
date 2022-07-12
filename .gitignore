@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 
 *.pdf
+!Document.pdf
 *.png
 
 ## Core latex/pdflatex auxiliary files:

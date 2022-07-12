@@ -92,4 +92,23 @@ plot_bar_chart(ptf_holdings_df,
                'PRC_ERC',
                fld_data,
                by_sector = False)
+#%% Latex table
+to_latex_table(ptf_holdings_df, 
+               ['Name', 'Weight', 'PRC'],
+               fld_data,
+               'table_by_asset.tex',
+               'PRC',
+               caption='Risk decomposition by asset')
+to_latex_table(ptf_holdings_df_grouped, 
+               ['Weight', 'PRC'],
+               fld_data,
+               'table_by_sector.tex',
+               'PRC',
+               caption='Risk decomposition by asset')
+to_latex_table(ptf_holdings_df, 
+               ['Name','w_ERC', 'PRC_ERC'],
+               fld_data,
+               'table_by_asset_ERC.tex',
+               'PRC_ERC',
+               caption='Risk decomposition by asset for the ERC portfolio')
 

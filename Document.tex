@@ -5,7 +5,7 @@
 
 %\DeclareMathOperator*{\sup}{sup}
 \DeclareMathOperator*{\argmax}{arg\,max} % argmax operator
-
+\DeclareMathOperator*{\argmin}{arg\,min}
 %% remark theoremstyle
 %\newtheoremstyle{break}
 %{\topsep}{\topsep}%
@@ -129,7 +129,7 @@ Let $w \in \mathbb{R}^n$ be the vector of portfolio weights. Then
 Plugging the numbers we get $\sigma(w)=40.71\%$
 
 \subsection{Question 2.2}
-Let us recall the main results about risk decomposition.
+Let us recall the main results about risk decomposition that will be used in this section.
 \begin{definition}
 	Let $f(x)$ be a continous continuous and differentiable function of $x \in \mathbb{R}^n$. $f$ is said homogenous of degree one if 
 	\begin{equation}
@@ -157,7 +157,9 @@ where MRC stands for \textit{marginal risk contribution} and RC for \textit{risk
 \text{PRC}_i & = \frac{\text{RC}}{\sigma(w)} = w_i \frac{(\Sigma_n w)_i}{(w^T\Sigma_n w)}
 \end{align}
 
-Having this in mind, we can break down portfolio volatility by asset and sectors. Results are shown in Figure (\ref{fig:histo_by_asset}) and (\ref{fig:histo_by_sector}) respectively
+Having this in mind, we can break down portfolio volatility by asset and sectors. 
+
+In Figure (\ref{fig:histo_by_asset}) and (\ref{fig:histo_by_sector}) we report \textit{percentage risk contributions} (PRC) and portfolio weights by asset and sectors respectively. From (\ref{fig:histo_by_asset}) we see that tech giants like Apple, Microsoft, Alphabet and Amazon contribute to more than half (51.50\%) of the total risk: for this reason the portfolio cannot be described as well-diversified. The by-sector analysis confirms this finding: tech-heavy sectors like IT and Communication Services take a big share of the total risk. This is usually the case for cap-weighted index portfolios. It's interesting to note that we can draw the same conclusion just by looking at portfolio weights. This is not true in general (it would not be the case for a multi-asset portfolio) and it is due to the fact that large-cap US stocks share a similar volatility profile.
 
 \begin{figure}[H]
 	\centering
@@ -171,14 +173,45 @@ Having this in mind, we can break down portfolio volatility by asset and sectors
  	\caption{Sectors weights and percentage risk contributions (PRC) of a portfolio of US stocks}
  	\label{fig:histo_by_sector}
  \end{figure}
- 
+
+\centering
+\input{data/table_by_asset.tex}
+
+\centering
+\input{data/table_by_sector.tex}
+
+\subsection{Question 2.3}
+By risk parity portfolio we mean the equal risk contribution (ERC) portfolio, that is a portfolio whose weights satisfy the following relations
+\begin{equation}
+\text{RC}_i = \text{RC}_j, \quad \forall i=1, \ldots, n.
+\end{equation}
+There is no close formed solution to this problem and one has to solve the following optimization problem:
+\begin{align}
+w^{\star} & =  \argmin\sum_{i=1}^n\Bigg(\frac{w_i(\Sigma_n w)_i}{w^T \Sigma_n w} - \frac{1}{n}\Bigg)^2\\
+\text{s.t.} & \quad 1^T w = 1 \\
+& \quad 0 \leq w \leq 1
+\end{align}
 
 
+The results are reported in Figure (\ref{fig:histo_ERC}) and in the following table.
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{data/bar_plot_by_asset_w_ERC_PRC_ERC}
+	\caption{Asset weights and percentage risk contributions (PRC) of the equal risk contribution portfolio (ERC).}
+	\label{fig:histo_ERC}
+\end{figure}
 
+\centering
+\input{data/table_by_asset_ERC.tex}
 
-
-\appendix
-\section{Appendix}
-
+\section{Further development}
+Possible ways to extend this work are:
+\begin{itemize}
+	\item computing how the portfolio is diversified in terms of factor \cite{risk_parity} (as well as in terms of assets and sectors)
+	\item exploring new numerical algorithms for solving efficiently the risk parity problem at scale \cite{iterative_meth}
+\end{itemize} 
+\nocite{*}
+\bibliographystyle{acm}
+\bibliography{biblio}
 
 \end{document}

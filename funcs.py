@@ -112,9 +112,16 @@ def compute_ERC_weight(sigma_n, w):
                    options={'disp': True})
     return res
     
-    
 
-    
+def to_latex_table(ptf_holdings_df, cols_list, fld_data, file_name, sort_by, caption):
+    ptf_holdings_df.sort_values(by=sort_by,
+                                ascending=False).to_latex(buf=fld_data / file_name,
+                                                          columns=cols_list,
+                                                          float_format=lambda x: str(round(x * 100, 2)) + '%',
+                                                          caption=caption,
+                                                          position='H')
+
+
     
     
     
@@ -123,4 +130,4 @@ def compute_ERC_weight(sigma_n, w):
 
 
 if __name__ == '__main__':
-    fld_data = Path("./data")
+    pass
