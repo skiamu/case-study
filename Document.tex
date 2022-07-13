@@ -47,14 +47,14 @@
 \maketitle
 
 \begin{abstract}
-	In this document we provide the answers to the case study problems. Supporting code for numerical results and plots is available at this \href{https://github.com/skiamu/case-study}{github repo}.
+	In this document we provide the solutions to the case study problems. Supporting code for numerical results and plots is available at this \href{https://github.com/skiamu/case-study}{github repo}.
 \end{abstract}
 
 \section{Question 1}
 Let $X \sim \text{logN}\big(\mu, \sigma^2\big)$. Here some standard results about the lognormal distribution which will be used in the following:
 \begin{gather}
 m =  \mathbb{E}[X]  = \exp\Big(\mu+\sigma^2/2\Big) \\
-v=  \Var{X} =  \Big[\exp(\sigma^2-1)\Big]\exp\Big(2\mu+\sigma^2\Big)\\\label{eq:logn_median}
+v=  \Var{X} =  \Big[\exp(\sigma^2)-1\Big]\exp\Big(2\mu+\sigma^2\Big)\\\label{eq:logn_median}
 m^{\star} =   \text{Med}[X] = \exp(\mu) 
 \end{gather}
 \subsection{Question 1.1}
@@ -62,7 +62,7 @@ In order compute the median $m^{\star}$ we need to derive the parameters $\mu$ a
 \begin{equation}
 \begin{cases}
 m = \exp\Big(\mu+\sigma^2/2\Big)\\
-v = \Big[\exp(\sigma^2-1)\Big]\exp\Big(2\mu+\sigma^2\Big).
+v = \Big[\exp(\sigma^2)-1\Big]\exp\Big(2\mu+\sigma^2\Big).
 \end{cases}
 \end{equation}
 By noting that the second factor in $v$ is equal to $m^2$ we get that 
@@ -83,10 +83,10 @@ By plugging the numbers we get $\sigma^2=0.02257$ and $\mu = 0.0469 $. It follow
 
 
 \section{Question 2}
-In this section we answer question 2. Before doing that, we briefly recall the underlying factor model for asset returns in order to set notation 
+In this section we answer question 2. Before doing that, we briefly recall the underlying factor model for asset returns in order to set notation and recall its main properties.
 
 \begin{definition}
-	Let $R$ be an $n$-dimensional random vector describing assets return over a generic period $[t, T]$. We suppose $R$ follows a linear factor model 
+	Let $R$ be an $n$-dimensional random vector of assets returns over a generic period $[t, T]$. We suppose $R$ follows a linear factor model 
 	\begin{equation}\label{eq:factor_model}
 	R = \beta R_f + \epsilon
 	\end{equation}
@@ -96,7 +96,7 @@ In this section we answer question 2. Before doing that, we briefly recall the u
 		\item $\beta \in \mathbb{R}^{n \times f}$ is the factor loadings matrix
 		\item $\epsilon$ is the $n$-dimensional random vector of residuals.
 	\end{itemize}
-The folowing standard hypothesis apply
+The following standard hypothesis apply
 \begin{itemize}
 	\item $\epsilon_i \overset{\mathrm{iid}}{\sim} (0, \Omega_{ii})$, $\forall i = 1, \ldots, n$
 	\item $R_f$ and $\epsilon$ are uncorrelated (i.e. $\Cov{R_f, \epsilon}=0_{f\times n}$)
@@ -111,7 +111,7 @@ The folowing standard hypothesis apply
 	where $\Sigma_f$ is the covariance matrix of $R_f$ and $\Omega$ is the diagonal covariance matrix of $\epsilon$
 \end{proposition}
 \begin{proof}
-	The expected value of $R$ reads $\mathbb{E}[R]=\beta \bar{R}_f$. Therefore
+	The expected value of $R$ is $\mathbb{E}[R]=\beta \bar{R}_f$. Therefore
 	\begin{align}
 	\Cov{R} & = \mathbb{E}\Bigg[\Big(R - \beta \bar{R}_f\Big)\Big(R - \beta \bar{R}_f\Big)^T\Bigg] \\
 	& = \mathbb{E}\Bigg[\Big(\beta R_f + \epsilon -  \beta \bar{R}_f\Big)\Big(R_f^T\beta^T + \epsilon^T - \bar{R}_f^T\beta^T\Big)\Bigg]\\ \label{eq:hp1}
@@ -159,7 +159,7 @@ where MRC stands for \textit{marginal risk contribution} and RC for \textit{risk
 
 Having this in mind, we can break down portfolio volatility by asset and sectors. 
 
-In Figure (\ref{fig:histo_by_asset}) and (\ref{fig:histo_by_sector}) we report \textit{percentage risk contributions} (PRC) and portfolio weights by asset and sectors respectively. From (\ref{fig:histo_by_asset}) we see that tech giants like Apple, Microsoft, Alphabet and Amazon contribute to more than half (51.50\%) of the total risk: for this reason the portfolio cannot be described as well-diversified. The by-sector analysis confirms this finding: tech-heavy sectors like IT and Communication Services take a big share of the total risk. This is usually the case for cap-weighted index portfolios. It's interesting to note that we can draw the same conclusion just by looking at portfolio weights. This is not true in general (it would not be the case for a multi-asset portfolio) and it is due to the fact that large-cap US stocks share a similar volatility profile.
+In Figure (\ref{fig:histo_by_asset}) and (\ref{fig:histo_by_sector}) we report \textit{percentage risk contributions} (PRC) and portfolio weights by asset and sectors respectively. From Figure (\ref{fig:histo_by_asset}) we see that tech giants like Apple, Microsoft, Alphabet and Amazon contribute to more than half (51.50\%) of the total risk: for this reason the portfolio cannot be described as well-diversified. The by-sector analysis confirms this finding: tech-heavy sectors like IT and Communication Services take a big share of the total risk. This is usually the case for cap-weighted index portfolios. It's interesting to note that we can draw the same conclusion just by looking at portfolio weights. This is not true in general (it would not be the case for a multi-asset portfolio) and it is due to the fact that large-cap US stocks share a similar volatility profile.
 
 \begin{figure}[H]
 	\centering
@@ -207,8 +207,8 @@ The results are reported in Figure (\ref{fig:histo_ERC}) and in the following ta
 \section{Further development}
 Possible ways to extend this work are:
 \begin{itemize}
-	\item computing how the portfolio is diversified in terms of factor \cite{risk_parity} (as well as in terms of assets and sectors)
-	\item exploring new numerical algorithms for solving efficiently the risk parity problem at scale \cite{iterative_meth}
+	\item In addition to analysing portfolio diversification in terms of assets and sectors, it would be interesting to compute factors diversification through risk decomposition \cite{risk_parity} 
+	\item Exploring new numerical algorithms for solving efficiently the risk parity problem at scale \cite{iterative_meth}
 \end{itemize} 
 \nocite{*}
 \bibliographystyle{acm}
